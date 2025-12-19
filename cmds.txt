@@ -1,0 +1,41 @@
+// Rviz
+ros2 run rviz2 rviz2 -d ~/ros2_ws/src/myrobot/config/myrobot.rviz --ros-args -p use_sim_time:=false
+
+
+// Slam_toolbox
+ros2 launch slam_toolbox online_async_launch.py slam_params_file:=./src/myrobot/config/mapper_params_online_async.yaml use_sim_time:=false
+
+
+// teleop_keyboard:
+ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/cmd_vel_teleop
+
+
+// Twist_mux node:
+ros2 run twist_mux twist_mux --ros-args --params-file ./src/myrobot/config/twist_mux.yaml -r cmd_vel_out:=/diff_cont/cmd_vel_unstamped
+
+
+// NAVIGATION - nav2:
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false
+ros2 launch nav2_bringup navigation_launch.py \
+  use_sim_time:=false \
+  params_file:=./src/myrobot/config/nav2.yaml
+
+// plot_data:
+ros2 run plotjuggler plotjuggler
+
+
+// Launch_robot:
+ros2 launch myrobot launch_realrobot.launch.py
+
+// Launch_LiDAR:
+ ros2 launch myrobot rplidar.launch.py
+ 
+ 
+ ros2 launch wit_imu_driver wit901.launch.py
+
+// List_serial:
+ls /dev/ttyUSB*
+ls /dev/ttyACM*
+
+pkill -f ros2
+
