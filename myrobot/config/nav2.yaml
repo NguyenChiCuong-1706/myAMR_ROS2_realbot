@@ -1,0 +1,31 @@
+controller_server:
+  ros__parameters:
+    use_sim_time: false
+    controller_frequency: 20.0
+    controller_plugins: ["FollowPath"]
+
+    FollowPath:
+      plugin: "dwb_core::DWBLocalPlanner"
+
+      # ---- REQUIRED for DWB ----
+      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
+
+      RotateToGoal: {class: "RotateToGoal", scale: 32.0}
+      Oscillation: {class: "Oscillation", scale: 1.0}
+      BaseObstacle: {class: "BaseObstacle", scale: 0.02}
+      GoalAlign: {class: "GoalAlign", scale: 24.0, forward_point_distance: 0.1}
+      PathAlign: {class: "PathAlign", scale: 32.0, forward_point_distance: 0.1}
+      PathDist: {class: "PathDist", scale: 32.0}
+      GoalDist: {class: "GoalDist", scale: 24.0}
+
+      # ---- SPEED LIMITS (units: m/s and rad/s) ----
+      max_vel_x: 0.19
+      max_speed_xy: 0.19
+      max_vel_theta: 0.7
+
+      # optional smoother accel
+      acc_lim_x: 0.5
+      acc_lim_theta: 1.0
+
+      # IMPORTANT: set "stopped" threshold low
+      trans_stopped_velocity: 0.02
